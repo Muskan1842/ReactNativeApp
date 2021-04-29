@@ -13,7 +13,7 @@ npm: 7.10.0
 ## Setup:
 #### 1. Clone repository:
 ```
-$ git clone https://github.com/paritoshdandekar/Teesta_Challenge
+$ git clone https://github.com/Muskan1842/ReactNativeApp
 ```
 #### 2. Installation of dependencies in root directory:
 ```
