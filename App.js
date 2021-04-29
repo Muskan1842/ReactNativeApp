@@ -1,8 +1,3 @@
-
-//  https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=friends&key=[YOUR_API_KEY] HTTP/1.1
-// npx react-native run-android
-// AIzaSyBqHaxjs6fxLKX76_nkzB0xLUykgiDsIZQ
-
 import React, { useState } from 'react';
 import { Component, Node } from 'react';
 import ContainerComponent from './ContainerComponent';
@@ -24,46 +19,41 @@ export default function App() {
 
   const [textInputValue, setTextInputValue] = useState('');
   const [cardData, setCardData] = useState([]);
-  const [nextPgToken,setNextPgToken] = useState('');
+  const [nextPgToken, setNextPgToken] = useState('');
 
-  const nextPageData=()=>{
-    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&pageToken=${nextPgToken}&q=${textInputValue}&type=video&key=AIzaSyBqHaxjs6fxLKX76_nkzB0xLUykgiDsIZQ`)
-    .then(response => response.json()).then(data => {
-      setCardData([...cardData,...data.items])
-      setNextPgToken(data.nextPageToken)
-      console.log(nextPgToken)
-    })
+  const nextPageData = () => {
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&pageToken=${nextPgToken}&q=${textInputValue}&type=video&key=AIzaSyBLb7paIYHUcVnoxaVul3i1vFHAYwnYZ4I`)
+      .then(response => response.json()).then(data => {
+        setCardData([...cardData, ...data.items])
+        setNextPgToken(data.nextPageToken)
+        console.log(nextPgToken)
+      })
   }
-// ${page}
   const fetchQuery = () => {
     console.log('Check Log')
-    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&pageToken=&q=${textInputValue}&type=video&key=AIzaSyBqHaxjs6fxLKX76_nkzB0xLUykgiDsIZQ`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&pageToken=&q=${textInputValue}&type=video&key=AIzaSyBLb7paIYHUcVnoxaVul3i1vFHAYwnYZ4I`)
       .then(response => response.json()).then(data => {
-        
+
         setCardData(data.items)
         setNextPgToken(data.nextPageToken)
-        
+
 
       })
-      console.log(nextPgToken)
+    console.log(nextPgToken)
   }
   return (
     <View style={styles.whole} >
-      {/* style={styles.searchbar */}
-      {/* <View style={styles.searchbar}> */}
       <TextInput
         style={styles.textInput}
         onChangeText={(val) => setTextInputValue(val)} />
       <View style={styles.searchButton}>
-        <Button color='black'
+        <Button color='#14161a'
           title='Search'
           onPress={() => fetchQuery()} />
-        {/* </View> */}
       </View>
 
       <FlatList
         horizontal
-        //  style= {styles.container}
         data={cardData}
         keyExtractor={(item) => item.id.videoId}
         renderItem={({ item }) => {
@@ -74,7 +64,7 @@ export default function App() {
             videoChannel={item.snippet.channelTitle}
           ></ContainerComponent>
         }}
-        onEndReached={()=> nextPageData()}
+        onEndReached={() => nextPageData()}
         onEndReachedThreshold={0}
       />
     </View>
@@ -83,18 +73,23 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
+    elevation: 7,
+    shadowOffset: {
+        width: 0,
+        height: 4,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowColor:'black',
+},
   flatlist: {
-marginHorizontal: 32,
+    marginHorizontal: 32,
   },
   whole: {
     flex: 1,
-    backgroundColor: 'cadetblue',
-    alignItems: 'center'
+    backgroundColor: '#4a4c50',
 
+    alignItems: 'center'
   },
 
   searchbar: {
@@ -108,6 +103,8 @@ marginHorizontal: 32,
     padding: 5,
     borderBottomLeftRadius: 13,
     borderTopLeftRadius: 13,
+    borderBottomRightRadius: 13,
+    borderTopRightRadius: 13,
     marginTop: '3%',
     marginRight: '5%',
   },
@@ -117,47 +114,13 @@ marginHorizontal: 32,
     fontWeight: '700',
     width: '83%',
     height: 45,
-    // marginLeft: '5%',
-    // marginRight: '5%',
     marginTop: '3%',
-    // borderBottomRightRadius: 13,
+    padding:5,
+    borderBottomRightRadius: 13,
     borderBottomLeftRadius: 13,
-    // borderTopRightRadius: 13,
+    borderTopRightRadius: 13,
     borderTopLeftRadius: 13,
-  },
-
-  containerImage: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-    shadowColor: "#000",
-    // elevation: 24,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 12,
-    // },
-    // shadowOpacity: 0.58,
-    // shadowRadius: 16.00,
-    width: '80%',
-    borderBottomRightRadius: 25,
-    borderBottomLeftRadius: 25,
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-    height: 500,
-    justifyContent: 'center'
-  },
-
-  containerContent: {
-    width: '80%',
-    borderBottomRightRadius: 25,
-    borderBottomLeftRadius: 25,
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-    borderWidth: 1,
-    height: 100,
-    marginTop: 12,
-    paddingHorizontal: 24,
-    justifyContent: 'center'
-  },
+  }
 
 });
 
